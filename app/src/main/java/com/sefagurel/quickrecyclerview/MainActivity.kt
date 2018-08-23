@@ -1,11 +1,14 @@
+/*
+ * Created by Sefa Gürel on 23.08.2018 15:15
+ * Copyright (c) 2018 . All rights reserved.
+ */
+
 package com.sefagurel.quickrecyclerview
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity;
-import android.view.Menu
-import android.view.MenuItem
-
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.sefagurel.library.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -15,25 +18,48 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+//      val adapter = QuickAdapter(quickDiff)
+        val adapter = QuickAdapter()
+
+        adapter.addRenderer<Model1>(R.layout.item1) { view, model ->
+            view.findViewById<TextView>(R.id.txt1).text = model.title
         }
+
+        adapter.addRenderer<Model2>(R.layout.item2) { view, model ->
+            view.findViewById<TextView>(R.id.txt2).text = model.name
+        }
+
+        recyclerview.setVerticalLinearLayoutManager()
+        recyclerview.adapter = adapter
+
+        adapter.setItems(getList())
+
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
+    fun getList(): List<QuickModel> {
+        val list = mutableListOf<QuickModel>()
+        list.add(Model1(1, "sefa"))
+        list.add(Model2(2, "sefa", 29))
+        list.add(Model1(3, "serkan"))
+        list.add(Model2(4, "serkan", 21))
+        return list
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+    var quickDiff = object : QuickDiff {
+        override fun areItemsTheSame(oldItem: QuickModel, newItem: QuickModel): Boolean {
+            when {
+                oldItem is Model1 && newItem is Model1 -> return oldItem.id == newItem.id
+                oldItem is Model2 && newItem is Model2 -> return oldItem.id == newItem.id
+                else -> return false
+            }
+        }
+
+        override fun areContentsTheSame(oldItem: QuickModel, newItem: QuickModel): Boolean {
+            when {
+                oldItem is Model1 && newItem is Model1 -> return oldItem.title == newItem.title
+                oldItem is Model2 && newItem is Model2 -> return oldItem.name == newItem.name
+                else -> return false
+            }
         }
     }
 }
