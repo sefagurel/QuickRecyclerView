@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         recyclerview.setVerticalLinearLayoutManager()
+        recyclerview.setItemDivider(R.drawable.divider_vertical)
         recyclerview.adapter = adapter
 
         adapter.setItems(getList())
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         list.add(PersonModel(2, "Sefa Gürel", 29))
         list.add(DateModel("Yesterday"))
         list.add(PersonModel(4, "Serkan Gürel", 21))
+        list.add(PersonModel(4, "Selim TOKSAL", 25))
         return list
     }
 
