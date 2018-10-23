@@ -6,7 +6,9 @@
 package com.sefagurel.library
 
 import android.view.View
+import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.lang.reflect.Type
@@ -15,13 +17,13 @@ import java.lang.reflect.Type
 fun RecyclerView.setVerticalLinearLayoutManager() {
     val llm = LinearLayoutManager(context)
     llm.orientation = LinearLayoutManager.VERTICAL
-    setLayoutManager(llm)
+    layoutManager = llm
 }
 
 fun RecyclerView.setHorizontalLinearLayoutManager() {
     val llm = LinearLayoutManager(context)
     llm.orientation = LinearLayoutManager.HORIZONTAL
-    setLayoutManager(llm)
+    layoutManager = llm
 }
 
 inline fun <reified KN : QuickModel> QuickAdapter.addRenderer(@LayoutRes resId: Int,
@@ -37,4 +39,10 @@ inline fun <reified KN : QuickModel> myRenderer(@LayoutRes resId: Int,
                                                 noinline kninit: (view: View, model: KN) -> Unit): QuickRendererExt<KN> {
     val typ: Type = KN::class.javaObjectType
     return QuickRendererExt(resId, kninit, typ)
+}
+
+fun RecyclerView.setItemDivider(@DrawableRes resId: Int){
+    val itemDecoration = DividerItemDecoration(context,(layoutManager as LinearLayoutManager).orientation)
+    itemDecoration.setDrawable(resources.getDrawable(resId))
+    addItemDecoration(itemDecoration)
 }
