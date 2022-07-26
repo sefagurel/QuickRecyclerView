@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity() {
 
         adapter.setItems(getList())
 
-        fab.setOnClickListener { adapter.setItems(getList()) }
-
     }
 
     fun getList(): List<QuickModel> {
